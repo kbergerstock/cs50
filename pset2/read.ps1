@@ -1,0 +1,5 @@
+"this is a test. this is not a good test." |  ./read.exe  
+"Congratulations! Today is your day. You're off to Great Places! You're off and away!" | ./read.exe
+"Harry Potter was a highly unusual boy in many ways. For one thing, he hated the summer holidays more than any other time of year. For another, he really wanted to do his homework, but was forced to do it in secret, in the dead of the night. And he also happened to be a wizard." | ./read.exe
+"As the average number of letters and words per sentence increases, the Coleman-Liau index gives the text a higher reading level. If you were to take this paragraph, for instance, which has longer words and sentences than either of the prior two examples, the formula would give the text an eleventh grade reading level." | ./read.exe
+"One fish. Two fish. Red Fish. Blue fish. This one has a little car. This one has a little star." | ./read.exe

@@ -1,0 +1,33 @@
+{% set rn = " " ~ s1 %}
+<div class="container">
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td></td>
+                <td></dh>
+                {% for c in s2 %}
+                    <td><b>{{c}}</b></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td></td>
+                {% set cols = matrix[0] %}
+                {% for col in cols %}
+                    <td><b>{{col[0]}}</b></td>
+                {% endfor %}
+            </tr>
+            {% for row in matrix %}
+            {% set rl = rn[loop.index0] %}
+            <tr>
+                {% for col in row %}
+                    {% if loop.index0 == 0 %}
+                        <td><b>{{rl}} {{col[0]}}</b></td>
+                    {% endif%}
+                    <td>{{col[0]}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
