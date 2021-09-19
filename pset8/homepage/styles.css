@@ -1,2 +1,20 @@
 /* stylepage for home page */
 /* Keith R. Bergerstock */
+
+body {
+    background-color: #101020;
+    height: 90%;
+  }
+
+  h1 {
+      color:orange;
+      text-align: center;
+  }
+  img {
+      margin-left: 6%;
+  }
+
+  p {
+    color: sandybrown;
+    margin-left: 6%;
+  }
