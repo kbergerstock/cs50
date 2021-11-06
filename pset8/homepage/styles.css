@@ -6,15 +6,29 @@ body {
     height: 90%;
   }
 
-  h1 {
+  h1,h2 {
       color:orange;
       text-align: center;
-  }
-  img {
-      margin-left: 6%;
   }
 
   p {
     color: sandybrown;
-    margin-left: 6%;
   }
+
+  .grid-container {
+    display: grid;
+    grid-gap:16 px;
+    grid-template-columns:520px 620px;
+    grid-template-rows:200px 40px 400px;
+    margin-left:6%;
+ }
+
+.item5{
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.item6{
+  grid-column: 2;
+  grid-row: 3;
+}

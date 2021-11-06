@@ -2,13 +2,28 @@
 // hat.script
 // k.r.bergerstock @20210815
 
+var kanvas;
+var kolor;
+
+function centerKanvas(){
+  var cx = (windowWidth - 680) / 2;
+  var cy = (windowHeight - 480) / 2;
+  kanvas.position(cx,cy)
+}
+
 function setup() {
-  createCanvas(680, 480);
+  kanvas = createCanvas(680, 480);
+  centerKanvas();
+  kolor = '#A04040'
+}
+
+function windowResized(){
+  centerKanvas();
 }
 
 function draw() {
   background(0);
-  stroke(160,64,64);
+  stroke(kolor);
   strokeWeight(1);
   
   // defined constants
