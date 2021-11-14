@@ -7,6 +7,8 @@
 #define MAX 9
 #define BUFSIZE 128
 
+typedef char *string;
+
 // Candidates have name and vote count
 typedef struct
 {
@@ -26,7 +28,7 @@ int candidate_count;
 bool vote(char *name);
 void print_winner(void);
 
-int main(int argc, char *argv[])
+int main(int argc, string argv[])
 {
     char inbuf[BUFSIZE];
     // Check for invalid usage
