@@ -21,15 +21,27 @@
 #define BUFFER_SIZE 8096
 #define WORD_LENGTH (2 * LENGTH - 15)
 #define MAX_LENGTH ( 2 * LENGTH)
+/* ----------  file locals --------------------------------*/
+typedef char *Word;
 
-const char *str2lower(const char *str, int len)
+unsigned int num_words = 0;
+bool initialized = false;
+Word *wordList = NULL;
+
+/* --------------------------------------------------------*/
+
+const char *str2lower(const char *str)
 {
     if(str != NULL)
     {
         char *t = (char *)str;
-        for(int k = 0; k < len; k++)
+        while(*t)
         {
-            t[k] = tolower(t[k]);
+            if (isalpha(*t))
+            {
+                *t = tolower(*t);
+            }
+            t++;
         }
     }
     return str;
@@ -40,7 +52,7 @@ const char *rtrim(const char *str, int k)
     if(str != NULL)
     {
         char *p = ((char *)str) + k;
-        while( *p == 0x00 || *p == 0x20  || *p == 0x0d || *p ==  0x0a)
+        while(*p == 0x00 || *p == 0x20  || *p == 0x0d || *p ==  0x0a)
         {
             *p = 0x00;
             p--;
@@ -52,11 +64,13 @@ const char *rtrim(const char *str, int k)
 // duplicate word into storage and ensure it does not exceed LENGTH in size
 char *duplicate(const char *str, int k)
 {
-    char *p = NULL;
-    if ((p = malloc(k + 1)) != NULL)
+    char *p = malloc(k + 1);
+    if ( p != NULL)
     {
         memcpy(p, str, k);
+        *(p+k) = 0;
     }
+
     return p;
 }
 
@@ -64,14 +78,58 @@ char *duplicate(const char *str, int k)
 void add(Word* list,int n,const char* s)
 {
     int k = strlen(s);
-    list[n] = (char *)str2lower(rtrim(duplicate(s,k),k),k);
+    list[n] = (char *)str2lower(rtrim(duplicate(s,k),k));
 }
-/* ----------  file locals --------------------------------*/
 
-unsigned int num_words = 0;
-bool initialized = false;
-Word *wordList = NULL;
-
+// returns the location of the word or -11 if not found
+int binarySearch(Word szWord)
+{
+    int rtv = -11;
+    switch (num_words)
+    {   case 0:
+            rtv = -11; break;
+        case 1:
+            rtv = 0;
+            break;
+        case 2:
+        case 3:
+            for(int i = 0; i < num_words; i++)
+            {
+                int results = strcmp(szWord, wordList[i]);
+                if (results == 0)
+                {
+                    rtv = i;
+                    break;
+                }
+            }
+            break;
+        default:
+        {
+            int mid, lower = 0;
+            int upper = num_words;
+            int results = 9991;
+            do
+            {
+                mid = (upper + lower) >> 1;
+                results = strcmp(szWord, wordList[mid]);
+                if (results == 0)
+                {
+                    rtv = mid;
+                }
+                else if (results < 0)
+                {
+                    upper = mid - 1;
+                }
+                else if (results > 0)
+                {
+                    lower = mid + 1;
+                }
+            }  while (results != 0 && (mid != lower && mid != upper));
+            break;
+        }
+    }
+    return rtv;
+}
 /* --------------------------------------------------------*/
 
 /**
@@ -80,32 +138,25 @@ Word *wordList = NULL;
 bool check(const char *szWord)
 {
     // duplicating the iput word prevents it from being changed
+    int rtv = false;
     int k  = strlen(szWord);
-    const char *szBuf = str2lower(rtrim(duplicate(szWord,k),k),k);
-    int mid, lower = 0;
-    int upper = num_words;
-    bool rtv = false;
-    int results;
-    while (lower <= upper && upper >= 0 && lower < num_words)
+    const char *szBuf = str2lower(rtrim(duplicate(szWord,k),k));
+    int ndx = hash(szBuf);
+    if (ndx >= 0 && ndx < num_words)
     {
-        mid = (upper + lower) >> 1;
-        results = strcmp(szBuf, wordList[mid]);
-        if (results == 0)
+        int r = strcmp(szBuf,wordList[ndx]);
+        if (r == 0)
         {
             rtv = true;
-            upper = -1;
-        }
-        else if (results < 0)
-        {
-            upper = mid - 1;
-        }
-        else
-        {
-            lower = mid + 1;
         }
     }
     free((char *)szBuf);
     return rtv;
+}
+
+unsigned int hash(const char *word)
+{
+    return binarySearch((Word) word);
 }
 
 /**
@@ -118,17 +169,20 @@ bool load(const char *dictionary)
     char *buffer = calloc(BUFFER_SIZE, sizeof(char));
     char *sbuf = calloc(MAX_LENGTH, sizeof(char));
     char *szWord = NULL;
-    // open the dictionary file
-    FILE *fp = fopen(dictionary, "r");
-    //set the input buffer size
-    setvbuf(fp, buffer, _IOFBF, BUFFER_SIZE);
     num_words = 0;
     // allocate memory for the word list
     wordList = calloc(storage, sizeof(Word));
-    // PROCESS the DICTIONARY FILE
-    if (fp != NULL)
+    // open the dictionary file
+    FILE *fp = fopen(dictionary, "r");
+    if (fp == NULL)
     {
-        do
+        rtv = false;
+    }
+    else
+    {
+        //set the input buffer size
+        setvbuf(fp, buffer, _IOFBF, BUFFER_SIZE);
+        do // PROCESS the DICTIONARY FILE
         {
             szWord = fgets(sbuf, WORD_LENGTH, fp);
             if (szWord != NULL)
@@ -149,7 +203,10 @@ bool load(const char *dictionary)
         }
         while (szWord != NULL);
         //set the return value
-        rtv = true;
+        if(num_words > 0)
+        {
+            rtv = true;
+        }
         // close the file
         fclose(fp);
     }

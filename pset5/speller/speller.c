@@ -1,14 +1,10 @@
 // Implements a spell-checker
-#define WINDOWS_10
 
 #include <ctype.h>
 #include <stdio.h>
-#ifdef WINDOWS_10
+#include <sys/resource.h>
+#include <sys/time.h>
 
-#else
-    #include <sys/resource.h>
-    #include <sys/time.h>
-#endif
 #include "dictionary.h"
 
 // Undefine any definitions
@@ -26,7 +22,7 @@ int main(int argc, char *argv[])
     // Check for correct number of args
     if (argc != 2 && argc != 3)
     {
-        printf("Usage: speller [dictionary] text\n");
+        printf("Usage: ./speller [DICTIONARY] text\n");
         return 1;
     }
 
@@ -72,7 +68,8 @@ int main(int argc, char *argv[])
     char word[LENGTH + 1];
 
     // Spell-check each word in text
-    for (int c = fgetc(file); c != EOF; c = fgetc(file))
+    char c;
+    while (fread(&c, sizeof(char), 1, file))
     {
         // Allow only alphabetical characters and apostrophes
         if (isalpha(c) || (c == '\'' && index > 0))
@@ -85,7 +82,7 @@ int main(int argc, char *argv[])
             if (index > LENGTH)
             {
                 // Consume remainder of alphabetical string
-                while ((c = fgetc(file)) != EOF && isalpha(c));
+                while (fread(&c, sizeof(char), 1, file) && isalpha(c));
 
                 // Prepare for new word
                 index = 0;
@@ -96,7 +93,7 @@ int main(int argc, char *argv[])
         else if (isdigit(c))
         {
             // Consume remainder of alphanumeric string
-            while ((c = fgetc(file)) != EOF && isalnum(c));
+            while (fread(&c, sizeof(char), 1, file) && isalnum(c));
 
             // Prepare for new word
             index = 0;
@@ -181,9 +178,6 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-#ifdef WINDOWS_10
-
-#else
 // Returns number of seconds between b and a
 double calculate(const struct rusage *b, const struct rusage *a)
 {
@@ -200,4 +194,3 @@ double calculate(const struct rusage *b, const struct rusage *a)
                 / 1000000.0);
     }
 }
-#endif
