@@ -1,0 +1,13 @@
+sort1 uses: bubble sort
+
+How do you know?: longest sort times on the random and reversed data files.
+Comparable on the sorted list (best case only 1 pass is needed).
+
+sort2 uses: merge sort
+
+How do you know?: fastest overall sort time for all input files.
+
+sort3 uses: selection sort
+
+How do you know?: having identified the other two
+then logically this must be selection sort.
