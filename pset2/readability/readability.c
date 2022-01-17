@@ -23,30 +23,32 @@ int count_characters(const char *buffer)
     int letters = 0;
     int words = 0;
     int sentences = 0;
-    char u = 0;
     char *t = (char *)buffer;
     while (*t)
     {
-        if (isalpha(*t))
+        switch (*t)
         {
-            letters++;
-        }
-        else if(*t == '!' || *t == '?1' || *t == '.')
-        {
-            sentences++;
-            words++;
-        }
-        else if(*t == ',' || *t == '.')
-        {
-            words++;
-        }
-        else if(*t == ' ' && isalpha(u))
-        {
-            words++;
+            case '.':
+            case '!':
+            case '?':
+                t++;            // skip over the following space
+                sentences++;
+                words ++;
+                break;
+            case ',':
+            case ';':
+                t++;
+            case ' ':
+                words++;
+                break;
+            default:
+                if (isalpha(*t))
+                {
+                    letters++;
+                }
         }
         if (*t)
         {
-            u = *t;
             t++;
         }
     }
