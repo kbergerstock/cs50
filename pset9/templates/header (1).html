@@ -1,0 +1,12 @@
+<!-- k.r.bergerstock @ 12/24/2020-->
+
+<div id="header">
+    <div class="w3-bar">
+        <a href="/" class="w3-bar-item w3-button w3-xxlarge">C$50 Finance</a>
+        {% if menu %}
+            {% for item in menu %}
+                <a href={{item[0]}} class="w3-bar-item w3-button w3-large w3-right">{{item[1]}}</a>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

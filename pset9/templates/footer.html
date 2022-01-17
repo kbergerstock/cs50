@@ -1,0 +1,8 @@
+<!-- k.r.bergerstock @ 12/24/2020-->
+X<div id="footer" class="w3-container w3-bottom">
+    {% if g.get('user_id',0) > 1000  %}
+        <p>{{ g.get('user_proper_name','') }} is logged in as {{ g.get('user_name','') }} </p>    
+    {% else %}          
+        <p>Please log in !!</p>  
+    {% endif %}
+</div>

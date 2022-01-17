@@ -1,0 +1,52 @@
+<!-- k.r.bergerstock @ 12/24/2020-->
+
+{% extends "layout.html" %} 
+{% block title %} History {% endblock %} 
+{% block main %}
+    <div  class="grid-container">  
+        <div class="grid-item" >
+            <table id="history" class="w3-hoverable">
+                <h4>Transaction history</h4>
+                <thead>
+                    <tr>
+                        <th id="hc1">DATE</th>    
+                        <th id="hc2">SYMBOL</th>
+                        <th id="hc3">CORPERATION NAME</th> 
+                        <th id="hc4">ACTION</th>
+                        <th id="hc5">PRICE</th>
+                        <th id="hc6">SHARES</th>
+                        <th id="hc7">INVESTED</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if table %}
+                        {% for row in table %}
+                            <tr>
+                                <td id="hc1">{{ row[1] }}</td> 
+                                <td id="hc2">{{ row[2] }}</td>
+                                <td id="hc3">{{ row[3] }}</td>
+                                <td id="hc4">{{ row[4] }}</td>
+                                <td id="hc5">{{ row[5] }}</td>
+                                <td id="hc6">{{ row[6] }}</td>
+                                <td id="hc7">{{ row[7] }}</td>
+                            </tr>
+                        {% endfor %} 
+                    {% endif %}
+                    {% for row in range(20) %}
+                        <tr>                  
+                            <td id="hc1">0000-00-00</td>
+                            <td id="hc2">...</td>
+                            <td id="hc3">....</td>
+                            <td id="hc4">0</td>
+                            <td id="hc5">NA</td>
+                            <td id="hc6">0</td>
+                            <td id="hc7">0</td>
+                        </tr>    
+                    {% endfor %}            
+                </tbody>
+            </table>
+        </div>
+        <div class="grid-item">
+        </div>
+    </div>
+{% endblock %}

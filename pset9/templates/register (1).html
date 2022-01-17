@@ -1,0 +1,24 @@
+
+<!-- k.r.bergerstock @ 12/24/2020-->
+
+{% extends "layout.html" %}
+{% block title %} REGISTER {% endblock %}
+{% block main %}
+<div id="filler" w3-container></div>
+<form action="/register" method="post">
+    <div class="w3-cell-row">
+        <div class="w3-container w3-cell" style="width:30%"></div>
+        <div class="w3-container w3-cell w3-cell-middle" style="width:40%">
+            <input class="w3-input w3-border w3-round w3-margin" name="username" placeholder="Username" type="text" />
+            <input class="w3-input w3-border w3-round w3-margin-left" name="password" placeholder="Password" type="password" />
+            <input class="w3-input w3-border w3-round w3-margin" name="first" placeholder="first name" type="text" />
+            <input class="w3-input w3-border w3-round w3-margin-left" name="middle" placeholder="middle name or initial" type="text"/>
+            <input class="w3-input w3-border w3-round w3-margin " name="last" placeholder="Last name" type="text" />
+            <input class="w3-check w3-round w3-margin-left" type="checkbox" checked="checked">
+            <label>Log in</label>
+            <button class="w3-btn w3-round w3-margin w3-blue w3-text-black" type="submit">Commit</button>
+        </div>
+        <div class="w3-container w3-cell" style="width:30%"></div>
+    </div>
+</form>
+{% endblock %}

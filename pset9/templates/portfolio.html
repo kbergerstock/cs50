@@ -1,0 +1,101 @@
+<!-- k.r.bergerstock @ 12/24/2020-->
+{% extends "layout.html" %} 
+{% block title %} Portfolio {% endblock %} 
+{% block main %}
+    <form action="/portfolio" method="POST">
+        <div class="grid-container">
+            <div class="grid-item">
+                <table id="portfolio" class="w3-hoverable">
+                    <h4>Portfolio Cash Balance {{ cash }}</h4>
+                    <thead>
+                        <tr>
+                            <th id="qc1">select</th>
+                            <th id="ppc1">SYMBOL</th>    
+                            <th id="ppc2">CORPERATION NAME</th>           
+                            <th id="ppc3">SHARES</th>
+                            <th id="ppc4">INVESTED</th>
+                            <th id="ppc5">CUR. PRICE</th>            
+                            <th id="ppc6">CUR. VALUE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if table %}
+                            {% for row in table %}
+                                <tr>
+                                    <td id="qc1"><input type="checkbox" name={{row[0]}}></td>
+                                    <td id="ppc1">{{ row[0] }}</td> 
+                                    <td id="ppc2">{{ row[1] }}</td>
+                                    <td id="ppc3">{{ row[2] }}</td>
+                                    <td id="ppc4">{{ row[3] }}</td>
+                                    <td id="ppc5">{{ row[4] }}</td>
+                                    <td id="ppc6">{{ row[5] }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        {% for row in range(20) %}
+                            <tr>      
+                                <td id="qc1">..</td>           
+                                <td id="ppc1">...</td>
+                                <td id="ppc2">.....</td>
+                                <td id="ppc3">0</td>
+                                <td id="ppc4">0.00</td>
+                                <td id="ppc5">0.00</td>
+                                <td id="ppc6">0.00</td>
+                            </tr>    
+                        {% endfor %}
+                    </tbody>       
+                </table> 
+            </div>
+            <div class="grid-item">
+                            <input class="w3-input w3-border w3-round w3-margin" name="shares" placeholder="Shares" type="text" />
+                <div class="w3-margin"
+                    <p>
+                        <input class="w3-radio" type="radio" name="job" value="quote"/>
+                        <label>Quote</label>
+                    </p>
+                    <p>
+                        <input class"w3-radio" type="radio" name="job" value="track"/>
+                        <label>Track</label>
+                    </p>
+                    <p>                
+                        <input class="w3-radio" type="radio" name="job" value="buy"/>
+                        <label>Buy</label>
+                    </p>
+                    <p>
+                        <input class="w3-radio" type="radio" name="job" value="sell"/>
+                        <label>Sell</label>
+                    </p>
+                    <p>
+                        <input class="w3-radio" type="radio" name="job" value="delete"/>
+                        <label>Delete</label>
+                    </p>
+                </div> 
+                <input class="w3-input w3-border w3-round w3-margin" name="shares" placeholder="Shares" type="text" />
+                <div class="w3-margin"
+                    <p>
+                        <input class="w3-radio" type="radio" name="job" value="quote"/>
+                        <label>Quote</label>
+                    </p>
+                    <p>
+                        <input class="w3-radio" type="radio" name="job" value="track"/>
+                        <label>Track</label>
+                    </p>
+                    <p>                
+                        <input class="w3-radio" type="radio" name="job" value="buy"/>
+                        <label>Buy</label>
+                    </p>
+                    <p>
+                        <input class="w3-radio" type="radio" name="job" value="sell"/>
+                        <label>Sell</label>
+                    </p>
+                    <p>
+                        <input class="w3-radio" type="radio" name="job" value="delete"/>
+                        <label>Delete</label>
+                    </p>
+                </div> 
+
+                <button class="w3-btn w3-round w3-margin w3-blue w3-text-black" type="submit">Commit</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

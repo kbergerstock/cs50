@@ -1,0 +1,17 @@
+<!-- k.r.bergerstock @ 12/24/2020-->
+{% extends "layout.html" %} 
+{% block title %} Log In {% endblock %} 
+{% block main %}
+<div id="filler" class="w3-container"></div>
+<form action="/login" method="post">
+    <div class="w3-cell-row">
+        <div class="w3-container w3-cell" style="width:30%"></div>
+        <div class="w3-container w3-cell w3-cell-middle" style="width:40%">
+            <input class="w3-input w3-border w3-round" name="username" placeholder="Username" type="text" />
+            <input class="w3-input w3-border w3-round" name="password" placeholder="Password" type="password" />
+            <button class="w3-btn w3-round w3-blue w3-text-black" type="submit">Commit</button>
+        </div>
+        <div class="w3-container w3-cell" style="width:30%"></div>
+    </div>
+</form>
+{% endblock %}

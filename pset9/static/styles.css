@@ -1,0 +1,126 @@
+/* finance style sheet */
+/* k.r.bergerstock @ 12/24/2020 */
+
+main img {
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+.grid-container {
+    display: grid;
+    grid-gap:16 px;
+    grid-template-columns:110ch auto;
+    grid-template-rows: auto;
+    margin-left:2em;
+ }
+
+#header{
+    width:100%;
+    background-color: aquamarine;
+    color:black
+ }
+
+.w3-bar{
+    width:100%;
+    background-color: aquamarine;
+    color:black;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 3px solid black; 
+    font-family: monospace, "Lucida Console", "Courier New";
+}
+
+th,td{
+    border: 1px solid black;
+}
+
+body {
+    background-color: wheat;
+    color:black;
+ }
+
+thead,
+tbody {
+  display: block;
+}
+
+tbody {
+  max-height: 500px;
+  overflow: auto;
+}
+  
+ #footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width:100%;
+    background-color: aquamarine;
+    color:red;
+ }
+
+th{
+    background-color: red;
+    color:white;
+}
+
+h4{
+    width:100%;
+    background-color: wheat;
+    color:black;
+}
+
+#symbol{
+    width:8em;
+}
+
+#submit{
+    width:8em;
+}
+
+#portfolio{
+    width:64.6em;
+}
+#history{
+    width:63.6em;
+}
+#select{
+    width: 66.6em;
+}
+#hc4, #qc1, #qc5{
+    width: 4em;
+    text-align: center;
+}
+#hc2, #ppc1, #qc2{
+    width:5em;
+    text-align:center;
+}
+
+#hc1{
+    width: 6em;
+    text-align:left;
+}
+
+#qc3, #qc4, #ppc2, #hc3{
+    width: 26em;
+    text-align:left;
+}
+
+#ppc3, #ppc4, #ppc5, #ppc6, #hc5, #hc6, #hc7{
+    width:7em;
+    text-align:right;
+}
+
+
+#about{
+    width:40%;
+    margin-left:30%;
+    border:3px;
+    background-color:aquamarine;
+    color:red;
+}
+#about.p{
+    text-align: center;
+}

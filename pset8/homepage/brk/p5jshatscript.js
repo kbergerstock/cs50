@@ -3,18 +3,20 @@
 // k.r.bergerstock @20210815
 
 var kanvas;
-var kolor;
+var colorPicker;
 
 function centerKanvas(){
-  var cx = (windowWidth - 680) / 2;
-  var cy = (windowHeight - 480) / 2;
-  kanvas.position(cx,cy)
+  var cx = (500);
+  var cy = (200);
+  kanvas.position(cx,cy);
+  colorPicker.position(65,300);
 }
 
 function setup() {
   kanvas = createCanvas(680, 480);
+  colorPicker = createColorPicker('#A04040');
   centerKanvas();
-  kolor = '#A04040'
+  textSize(14);
 }
 
 function windowResized(){
@@ -23,9 +25,9 @@ function windowResized(){
 
 function draw() {
   background(0);
-  stroke(kolor);
+  stroke(colorPicker.value());
   strokeWeight(1);
-  
+  var start = performance.now();
   // defined constants
   let pi = 3.14159265358979323846;
   let XP = 300.0;
@@ -55,5 +57,9 @@ function draw() {
             point(sx, sy);
         }
     }
-  
+    var elapsed = int(performance.now() - start);
+    var msg = 'Elapsed time: ';
+    fill(colorPicker.value());
+    text(msg,5,25);
+    text(elapsed.toString(),95,25);
 }

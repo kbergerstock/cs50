@@ -1,0 +1,17 @@
+<!-- k.r.bergerstock @ 12/24/2020-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Apology
+{% endblock %}
+
+{% block main %}
+
+    <div class="w3-container w3-center">
+    <img alt="{{ top }}" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://i.imgur.com/CsCgN7Ll.png"/>
+    </div>
+    <footer>
+        {%include 'footer.html'%}
+    </footer>
+{% endblock %}

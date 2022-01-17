@@ -1,0 +1,41 @@
+
+<!-- k.r.bergerstock @ 12/24/2020-->
+
+{% extends "layout.html" %}
+{% block title %}QUOTE{% endblock %}
+
+{% block main %}
+    <form action="/select" method="POST">
+        <div class="grid-container">
+            <div class="grid-item">
+                <table id="select" class="w3-hoverable">
+                    <h4>Select stocks to quote</h4>
+                    <thead>
+                        <tr>
+                            <th id="qc1">select</th>
+                            <th id="qc2">SYMBOL</th>
+                            <th id="qc3">CORPERATION NAME</th>
+                            <th id="qc4">EXCHANGE</th>
+                            <th id="qc5">TYPE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stock in stocks %}
+                            <tr>
+                                <td id="qc1"><input type="checkbox" name={{stock[0]}}></td>
+                                <td id="qc2">{{ stock[0]}}</td>
+                                <td id="qc3">{{ stock[1]}}</td>
+                                <td id="qc4">{{ stock[2]}}</td>
+                                <td id="qc5">{{ stock[3]}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="grid-item">
+                <input id ="symbol" class="w3-input w3-border w3-margin w3-round" name="symbol" placeholder="symbol search" type="text" />
+                <button id ="submit" class="w3-btn w3-round w3-margin w3-blue w3-text-black" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

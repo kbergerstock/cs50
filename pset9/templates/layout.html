@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!-- k.r.bergerstock @ 12/24/2020-->
+
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="/static/favicon.ico" rel="icon">
+        <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        <title>C$50 Finance:{%block title %} {% endblock %} </title>
+    </head>
+    <div> 
+        <header>
+            {%include 'header.html'%}
+        </header>
+        <body>
+            {% block main %} {% endblock %}
+        </body>
+        <footer>
+            {%include 'footer.html'%}
+        </footer>
+    </div>    
+</html>

@@ -1,0 +1,23 @@
+<!-- k.r.bergerstock @ 12/24/2020-->
+
+{%extends 'layout.html'%}
+
+{% block title %}
+About
+{% endblock %}
+
+{% block main %}
+    <div class="grid-container-options">
+        <div clas="grid-item">
+            <p>{{title}}</p>
+            <p>cash balance {{stock[7]}}</p>
+        </div>
+        <div class="grid-item">
+            <p>If you were buying the stock "{{stock[1]}}", ({{stock[0]}})
+            your investment would be {{stock[5]}} for {{stock[6]}} shares.
+            </p>
+            <p>You have{% if stock[5] > stock[7] %} insufficient {%else%} sufficient {%endif%}funds to make this purchase.</p>
+        </div>
+        <div class="grid-item"/>
+    </div>
+{% endblock %}
