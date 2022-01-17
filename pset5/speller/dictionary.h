@@ -17,3 +17,4 @@ unsigned int size(void);
 bool unload(void);
 
 #endif // DICTIONARY_H
+
