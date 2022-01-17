@@ -1,0 +1,1 @@
+select printf("%.4f",avg(energy)) AS average from songs

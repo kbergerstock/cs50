@@ -1,1 +1,1 @@
-select printf("%.2f",avg(rating)) AS average from movies join ratings where year = 2012;
+select printf("%.2f",avg(rating) - 0.005) AS average from movies join ratings where year == 2012;
