@@ -14,33 +14,29 @@ int main(void)
     do
     {
         input_buffer[0] = 0;
-        fputs("enter starting population size: ", stdout);
-        fgets(input_buffer, BUFSIZE, stdin);
+        fputs("enter starting population size: ",stdout);
+        fgets(input_buffer,BUFSIZE,stdin);
         start_pop_size = atoi(input_buffer);
-    }
-    while (start_pop_size < 9);
+    } while(start_pop_size < 9);
 
     // TODO: Prompt for end size
-    do
-    {
+    do{
         input_buffer[0] = 0;
-        fputs("enter ending population size: ", stdout);
-        fgets(input_buffer, BUFSIZE, stdin);
+        fputs("enter ending population size: ",stdout);
+        fgets(input_buffer,BUFSIZE,stdin);
         end_pop_size = atoi(input_buffer);
-    }
-    while (end_pop_size < start_pop_size);
+    } while(end_pop_size <= start_pop_size);
 
     // TODO: Calculate number of years until we reach threshold
-    while (start_pop_size < end_pop_size)
+    do
     {
         int growth = start_pop_size / 3;
         int loss   = start_pop_size / 4;
         start_pop_size += (growth - loss);
-        // printf(" %d %d %d \n", growth, loss, start_pop_size);
+        // printf(" %d %d %d \n",growth,loss,start_pop_size);
         years++;
-    }
-
+    } while(start_pop_size < end_pop_size);
 
     // TODO: Print number of years
-    fprintf(stdout, "Years: %d", years);
+    fprintf(stdout,"years: %d\n",years);
 }

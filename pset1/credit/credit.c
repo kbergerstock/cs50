@@ -50,7 +50,7 @@ int what_card(int *ccn, int len)
     {
         r = AMEX;
     }
-    else if (len == 16 && ccn[0] == 4)
+    else if ((len == 13 || len == 16) && ccn[0] == 4)
     {
         r = VISA;
     }
@@ -77,13 +77,13 @@ int main(void)
     do
     {
         printf("Enter Card Number:");
-        fgets((char *)buffer, MAX_LEN ,stdin);
+        fgets((char *)buffer, MAX_LEN, stdin);
         // subtract 1 from len to account for line feed at end of buffer
         n = strlen(buffer) - 1; 
         // convert input buffer to integer array
         for (r = FALSE, L = 0; L < n; L++)
         {
-            if(isdigit(buffer[L]))
+            if (isdigit(buffer[L]))
             {
                 ccn[L] = buffer[L] & 0x0F;
             }

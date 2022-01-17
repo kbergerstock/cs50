@@ -13,7 +13,7 @@
 
 int get_steps(void)
 {
-    int steps = 0;    
+    int steps = 0;
     const char buffer[81];
     do
     {
@@ -55,7 +55,7 @@ int main(void)
 {
     // obtain pyramid size from user
     int steps = get_steps();
- 
+
     // verify that the number of entered pyramid steps are valid and fit on the screen
     if (steps > 0 && steps <= 8)
     {
