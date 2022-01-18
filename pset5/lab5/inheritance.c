@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 // Each person has two parents and two alleles
 typedef struct person
 {
     struct person *parents[2];
     char alleles[2];
+    int generation;
 }
 person;
 
@@ -40,36 +42,52 @@ int main(void)
 person *create_family(int generations)
 {
     // TODO: Allocate memory for new person
-    
+    person *p = calloc(1,sizeof(person));
+    p->generation = GENERATIONS - generations;
+  
     // Generation with parent data
     if (generations > 1)
     {
         // TODO: Recursively create blood type histories for parents
-        
+        p->parents[0] = create_family(generations - 1);
+        p->parents[1] = create_family(generations - 1);
 
         // TODO: Randomly assign child alleles based on parents
+        for(int i = 0; i < 2; i++)
+        {
+            int s = rand() % 2;
+            p->alleles[i] = p->parents[i]->alleles[s];
+        }
     }
 
     // Generation without parent data
     else
     {
         // TODO: Set parent pointers to NULL
-
+        p->parents[0] = NULL;
+        p->parents[1] = NULL;
         // TODO: Randomly assign alleles
+        p->alleles[0] = random_allele();        
+        p->alleles[1] = random_allele();
     }
 
     // TODO: Return newly created person
-    return NULL;
+    return p;
 }
 
 // Free `p` and all ancestors of `p`.
 void free_family(person *p)
 {
     // TODO: Handle base case
-
-    // TODO: Free parents
-
-    // TODO: Free child
+    if(p != NULL )
+    {
+        // TODO: Free parents
+        free_family(p->parents[0]);
+        free_family(p->parents[1]);
+ 
+        // TODO: Free child
+        free(p);
+    }
 }
 
 // Print each family member and their alleles.
@@ -81,16 +99,14 @@ void print_family(person *p, int generation)
         return;
     }
 
-    // Print indentation
-    for (int i = 0; i < generation * INDENT_LENGTH; i++)
-    {
-        printf(" ");
-    }
-
+    // Print indentation -- FIX remove loop
+    char *ident = calloc(1 + generation * INDENT_LENGTH,sizeof(char));
+    memset(ident, 0x20, generation * INDENT_LENGTH);
     // Print person
-    printf("Generation %i, blood type %c%c\n", generation, p->alleles[0], p->alleles[1]);
+    printf("%sGeneration %i, blood type %c%c\n",ident, generation, p->alleles[0], p->alleles[1]);
     print_family(p->parents[0], generation + 1);
     print_family(p->parents[1], generation + 1);
+    free(ident);
 }
 
 // Randomly chooses a blood type allele.
