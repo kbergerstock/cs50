@@ -26,9 +26,23 @@ typedef char *Word;
 
 unsigned int num_words = 0;
 bool initialized = false;
-Word *wordList = NULL;
 
+// Represents a node in a hash table
+typedef struct node
+{
+    const char *word;
+    struct node *next;
+}
+node;
+
+// TODO: Choose number of buckets in hash table
+const unsigned int Buckets = 65535;
+const unsigned int Limit = 65521;
+
+// Hash table
+node *hashTable = NULL;
 /* --------------------------------------------------------*/
+
 
 const char *str2lower(const char *str)
 {
@@ -75,61 +89,38 @@ char *duplicate(const char *str, int k)
 }
 
 // add a new word to the list
-void add(Word* list,int n,const char* s)
+void add(node *table, const char* s)
 {
     int k = strlen(s);
-    list[n] = (char *)str2lower(rtrim(duplicate(s,k),k));
+    // duplicate the string remoinvg trailing white space and converting to lower case
+    const char *szWord = str2lower(rtrim(duplicate(s,k),k));
+    // get the hash value of the word
+    int hdx = hash(szWord);
+    // get a node pointer to table index of the hash value
+    node *ptr = &table[hdx];
+    // look for an empty node entry
+    bool done = false;
+    do{
+        if(ptr->next == NULL && ptr->word == NULL)
+        {
+            // insert the word into the table
+            ptr->word = szWord;
+            // add an empty node to the next pointer
+            ptr->next = calloc(1, sizeof(node));
+            done = true;
+        }
+        else if(ptr->next == NULL)
+        {
+            ptr->next = calloc(1, sizeof(node));
+            ptr = ptr->next;
+        }
+        else
+        {
+            ptr = ptr->next;
+        }
+    }while (!done);
 }
 
-// returns the location of the word or -11 if not found
-int binarySearch(Word szWord)
-{
-    int rtv = -11;
-    switch (num_words)
-    {   case 0:
-            rtv = -11; break;
-        case 1:
-            rtv = 0;
-            break;
-        case 2:
-        case 3:
-            for(int i = 0; i < num_words; i++)
-            {
-                int results = strcmp(szWord, wordList[i]);
-                if (results == 0)
-                {
-                    rtv = i;
-                    break;
-                }
-            }
-            break;
-        default:
-        {
-            int mid, lower = 0;
-            int upper = num_words;
-            int results = 9991;
-            do
-            {
-                mid = (upper + lower) >> 1;
-                results = strcmp(szWord, wordList[mid]);
-                if (results == 0)
-                {
-                    rtv = mid;
-                }
-                else if (results < 0)
-                {
-                    upper = mid - 1;
-                }
-                else if (results > 0)
-                {
-                    lower = mid + 1;
-                }
-            }  while (results != 0 && (mid != lower && mid != upper));
-            break;
-        }
-    }
-    return rtv;
-}
 /* --------------------------------------------------------*/
 
 /**
@@ -141,22 +132,48 @@ bool check(const char *szWord)
     int rtv = false;
     int k  = strlen(szWord);
     const char *szBuf = str2lower(rtrim(duplicate(szWord,k),k));
-    int ndx = hash(szBuf);
-    if (ndx >= 0 && ndx < num_words)
+    int hdx = hash(szBuf);
+    node *ptr  = &hashTable[hdx];
+    bool done = false;
+    int match = -11;
+    do
     {
-        int r = strcmp(szBuf,wordList[ndx]);
-        if (r == 0)
+        if(ptr->word == NULL)
+        {
+            match = -11;
+            done = true;
+        }
+        else
+        {
+            match = strcmp(szBuf,ptr->word);
+        }
+        if(match == 0)
         {
             rtv = true;
+            done = true;
         }
-    }
+        else
+        {
+            ptr = ptr->next;
+        }
+
+    }while(!done && ptr->next);
+ 
     free((char *)szBuf);
     return rtv;
 }
 
 unsigned int hash(const char *word)
 {
-    return binarySearch((Word) word);
+    int hash = 0;
+    int g = 31;
+    char *s = (char *)word;
+    while(isalpha(*s))
+    {
+        hash = (hash * g + (*s - 'a')) & 0xffffffff;
+        s++;
+    }
+    return hash % Limit;
 }
 
 /**
@@ -164,14 +181,13 @@ unsigned int hash(const char *word)
  */
 bool load(const char *dictionary)
 {
-    int  storage = 150000;
     bool rtv = false;
-    char *buffer = calloc(BUFFER_SIZE, sizeof(char));
-    char *sbuf = calloc(MAX_LENGTH, sizeof(char));
+    char *buffer = calloc(1 + BUFFER_SIZE, sizeof(char));
+    char *sbuf = calloc(1 + MAX_LENGTH, sizeof(char));
     char *szWord = NULL;
     num_words = 0;
-    // allocate memory for the word list
-    wordList = calloc(storage, sizeof(Word));
+    // allocate memory for the bucket list of hashes
+    hashTable = calloc(Buckets, sizeof(node));
     // open the dictionary file
     FILE *fp = fopen(dictionary, "r");
     if (fp == NULL)
@@ -187,18 +203,8 @@ bool load(const char *dictionary)
             szWord = fgets(sbuf, WORD_LENGTH, fp);
             if (szWord != NULL)
             {
-                add(wordList,num_words,szWord);
+                add(hashTable, szWord);
                 num_words++;
-                // if the word list is insufficient in size
-                if (num_words + 5 > storage)
-                {
-                    // duplicate the word list increasing the size
-                    Word *tmp = wordList;
-                    storage += 5000;
-                    wordList = calloc(storage, sizeof(Word));
-                    memcpy(wordList, tmp, (num_words * sizeof(Word)));
-                    free(tmp);
-                }
             }
         }
         while (szWord != NULL);
@@ -227,12 +233,38 @@ unsigned int size(void)
 /**
  * Unloads dictionary from memory.  Returns true if successful else false.
  */
+
 bool unload(void)
 {
-    for (int i = 0; i < num_words; i++)
+    node *ptr = NULL;
+    node * tmp = NULL;
+
+    for (int i = 0 ; i < Limit; i++)
     {
-        free(wordList[i]);
+        ptr = &hashTable[i];
+        tmp = NULL;
+        bool skip = true;
+        while(ptr->word)
+        {
+            if(ptr->next)
+            {
+                free((char *)ptr->word);
+                if(skip)
+                {
+                    skip = false;
+                }
+                else
+                {
+                    tmp = ptr;
+                }
+                ptr = ptr->next;
+                if (tmp != NULL)
+                {
+                    free(tmp);
+                }
+            }
+        }
     }
-    free(wordList);
+    free(hashTable) ;
     return true;
 }
