@@ -28,10 +28,10 @@ unsigned int num_words = 0;
 bool initialized = false;
 
 // Represents a node in a hash table
-typedef struct node
+typedef struct _node
 {
     const char *word;
-    struct node *next;
+    struct _node *next;
 }
 node;
 
@@ -89,11 +89,11 @@ char *duplicate(const char *str, int k)
 }
 
 // add a new word to the list
-void add(node *table, const char* s)
+void add(node *table, const char *s)
 {
     int k = strlen(s);
     // duplicate the string remoinvg trailing white space and converting to lower case
-    const char *szWord = str2lower(rtrim(duplicate(s,k),k));
+    const char *szWord = str2lower(rtrim(duplicate(s, k), k));
     // get the hash value of the word
     int hdx = hash(szWord);
     // get a node pointer to table index of the hash value
@@ -101,18 +101,15 @@ void add(node *table, const char* s)
     // look for an empty node entry
     bool done = false;
     do{
-        if(ptr->next == NULL && ptr->word == NULL)
+        if (ptr->next == NULL && ptr->word == NULL)
         {
             // insert the word into the table
             ptr->word = szWord;
-            // add an empty node to the next pointer
-            ptr->next = calloc(1, sizeof(node));
             done = true;
         }
         else if(ptr->next == NULL)
         {
-            ptr->next = calloc(1, sizeof(node));
-            ptr = ptr->next;
+            ptr->next = calloc(1, sizeof(struct _node));
         }
         else
         {
@@ -131,33 +128,35 @@ bool check(const char *szWord)
     // duplicating the iput word prevents it from being changed
     int rtv = false;
     int k  = strlen(szWord);
-    const char *szBuf = str2lower(rtrim(duplicate(szWord,k),k));
+    const char *szBuf = str2lower(rtrim(duplicate(szWord, k), k));
     int hdx = hash(szBuf);
     node *ptr  = &hashTable[hdx];
     bool done = false;
     int match = -11;
     do
     {
-        if(ptr->word == NULL)
-        {
-            match = -11;
-            done = true;
-        }
-        else
+        if (ptr->word)
         {
             match = strcmp(szBuf,ptr->word);
-        }
-        if(match == 0)
-        {
-            rtv = true;
-            done = true;
+            if(match == 0)
+            {
+                rtv = true;
+                done = true;
+            }
+            else
+            {
+                ptr = ptr->next;
+                if(ptr == NULL)
+                {
+                    done = true;
+                }
+            }
         }
         else
         {
-            ptr = ptr->next;
+            done = true;
         }
-
-    }while(!done && ptr->next);
+    }while(!done);
  
     free((char *)szBuf);
     return rtv;
@@ -187,7 +186,7 @@ bool load(const char *dictionary)
     char *szWord = NULL;
     num_words = 0;
     // allocate memory for the bucket list of hashes
-    hashTable = calloc(Buckets, sizeof(node));
+    hashTable = calloc(Buckets, sizeof(struct _node));
     // open the dictionary file
     FILE *fp = fopen(dictionary, "r");
     if (fp == NULL)
@@ -233,38 +232,33 @@ unsigned int size(void)
 /**
  * Unloads dictionary from memory.  Returns true if successful else false.
  */
-
+ void freeNodes(node *ptr)
+ {
+   node *tmp = ptr;  
+   if (tmp != NULL)
+   {
+       freeNodes(tmp->next);
+       free((char *)tmp->word);
+       free(tmp);
+   } 
+ }
 bool unload(void)
 {
     node *ptr = NULL;
-    node * tmp = NULL;
+    node *tmp = NULL;
 
     for (int i = 0 ; i < Limit; i++)
     {
         ptr = &hashTable[i];
-        tmp = NULL;
-        bool skip = true;
-        while(ptr->word)
+        if (ptr->word)
         {
-            if(ptr->next)
-            {
-                free((char *)ptr->word);
-                if(skip)
-                {
-                    skip = false;
-                }
-                else
-                {
-                    tmp = ptr;
-                }
-                ptr = ptr->next;
-                if (tmp != NULL)
-                {
-                    free(tmp);
-                }
-            }
+            free((char *)ptr->word);
         }
+        if (ptr->next)
+        {
+            freeNodes(ptr->next);
+        }    
     }
-    free(hashTable) ;
+    free(hashTable);
     return true;
 }
