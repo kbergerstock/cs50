@@ -15,7 +15,7 @@ def inputString(prompt):
 
 
 def is_card_number_valid(ccn):
-    d2f = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9]   # l0ok up table for calue tp sum for double digits
+    d2f = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9]   # look up table for value to sum for double digits
     k = len(ccn) - 1
     sum = 0
     c = 0

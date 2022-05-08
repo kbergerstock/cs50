@@ -1,4 +1,4 @@
-# treadabilitypy
+# readability.py
 #
 # Keith R Bergerstock
 # date: 2020.11.16
